@@ -8,6 +8,8 @@ builder.Services.AddSwaggerGen();
 
 builder.AddMoneyDbContext(builder.Configuration);
 
+builder.Services.AddRepositories();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -19,3 +21,5 @@ if (app.Environment.IsDevelopment())
 app.AddParticipantEndpoints();
 
 app.Run();
+
+public partial class Program { }

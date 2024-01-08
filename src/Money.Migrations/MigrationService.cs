@@ -6,7 +6,7 @@ using Dapper;
 
 namespace Money.Migrations;
 
-internal class MigrationService
+public class MigrationService
 {
     private readonly string _connectionString;
 

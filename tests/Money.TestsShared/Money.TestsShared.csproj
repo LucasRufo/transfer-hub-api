@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Money.API\Money.API.csproj" />
+    <ProjectReference Include="..\..\src\Money.Domain\Money.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Money.Infrastructure\Money.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
