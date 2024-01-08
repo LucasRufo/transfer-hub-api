@@ -10,8 +10,8 @@ public class CreateParticipantsTable : Migration
     {
         Create.Table(tableName)
             .WithColumn("id").AsGuid().NotNullable().PrimaryKey()
-            .WithColumn("name").AsString().NotNullable()
-            .WithColumn("cpf").AsString().NotNullable()
+            .WithColumn("name").AsString(200).NotNullable()
+            .WithColumn("cpf").AsString(20).Unique().NotNullable()
             .WithColumn("created_at").AsDateTime().NotNullable()
             .WithColumn("updated_at").AsDateTime().Nullable();
     }
