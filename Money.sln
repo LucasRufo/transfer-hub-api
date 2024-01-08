@@ -13,11 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.API", "src\Money.API\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.Domain", "src\Money.Domain\Money.Domain.csproj", "{FBBE3F0B-27F2-4DA6-812A-FC831F9DB0F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.UnitTests", "tests\Money.UnitTests\Money.UnitTests.csproj", "{82CDAC48-E07A-422B-B2A6-6E7D3592A6A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.UnitTests", "tests\Money.UnitTests\Money.UnitTests.csproj", "{82CDAC48-E07A-422B-B2A6-6E7D3592A6A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.IntegrationTests", "tests\Money.IntegrationTests\Money.IntegrationTests.csproj", "{D19BE096-952E-44FC-BFA7-D8DAAFFC4C14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.IntegrationTests", "tests\Money.IntegrationTests\Money.IntegrationTests.csproj", "{D19BE096-952E-44FC-BFA7-D8DAAFFC4C14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.TestsShared", "tests\Money.TestsShared\Money.TestsShared.csproj", "{7F3CC1C0-862C-4354-AF7E-C98D8F968013}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Money.TestsShared", "tests\Money.TestsShared\Money.TestsShared.csproj", "{7F3CC1C0-862C-4354-AF7E-C98D8F968013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Money.Migrations", "src\Money.Migrations\Money.Migrations.csproj", "{8E739C61-7CB6-4310-A6ED-65516C66301A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{7F3CC1C0-862C-4354-AF7E-C98D8F968013}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F3CC1C0-862C-4354-AF7E-C98D8F968013}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F3CC1C0-862C-4354-AF7E-C98D8F968013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E739C61-7CB6-4310-A6ED-65516C66301A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E739C61-7CB6-4310-A6ED-65516C66301A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E739C61-7CB6-4310-A6ED-65516C66301A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E739C61-7CB6-4310-A6ED-65516C66301A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{82CDAC48-E07A-422B-B2A6-6E7D3592A6A3} = {DEF1D00F-2DA2-4155-848E-C3AF4D57FC61}
 		{D19BE096-952E-44FC-BFA7-D8DAAFFC4C14} = {DEF1D00F-2DA2-4155-848E-C3AF4D57FC61}
 		{7F3CC1C0-862C-4354-AF7E-C98D8F968013} = {DEF1D00F-2DA2-4155-848E-C3AF4D57FC61}
+		{8E739C61-7CB6-4310-A6ED-65516C66301A} = {2936409F-BC0E-416C-BE68-7E2291FFB5D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8644828E-EB01-4349-8CB3-5D3CFE7960E2}
