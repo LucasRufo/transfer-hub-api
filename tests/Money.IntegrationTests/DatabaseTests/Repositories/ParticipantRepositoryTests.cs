@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Money.Domain.Repositories;
 
 namespace Money.IntegrationTests.DatabaseTests.Repositories;
@@ -21,5 +20,15 @@ public class ParticipantRepositoryTests : BaseIntegrationTests
         var participantFromDatabase = ContextForAsserts.Participant.First();
 
         participant.Should().BeEquivalentTo(participantFromDatabase);
+    }
+
+    [Test]
+    public async Task ShouldGetParticipantByCPF()
+    {
+        var participantFromDb = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var participant = await _participantRepository.GetByCPF(participantFromDb.CPF);
+
+        participantFromDb.Should().BeEquivalentTo(participant);
     }
 }

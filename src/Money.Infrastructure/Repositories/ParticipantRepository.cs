@@ -1,4 +1,5 @@
-﻿using Money.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Money.Domain.Entities;
 using Money.Domain.Repositories;
 
 namespace Money.Infrastructure.Repositories;
@@ -12,4 +13,7 @@ public class ParticipantRepository(MoneyContext context) : IParticipantRepositor
         await _context.Participant.AddAsync(participant);
         await _context.SaveChangesAsync();
     }
+
+    public virtual async Task<Participant?> GetByCPF(string cpf)
+        => await _context.Participant.FirstOrDefaultAsync(x => x.CPF == cpf);
 }
