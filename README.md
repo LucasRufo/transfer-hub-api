@@ -2,7 +2,7 @@
 
 Requirements:
 
-- It should be possible to register a participant ❌
+- It should be possible to register a participant ✅
 - It should be possible to create a new deposit for a participant ❌
 - It should be possible to transfer money from one participant to another ❌
   - It shouldn't be possible to transfer if the participant does not have enough money ❌
