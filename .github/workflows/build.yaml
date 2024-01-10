@@ -1,5 +1,8 @@
 name: Build and test
 
+permissions:
+  pull-requests: write
+
 on:
   push:
     branches: [main]
@@ -24,14 +27,8 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      # - name: Test
-      #   run: dotnet test --no-restore --verbosity normal
-
       - name: Run all tests
         run: dotnet test Money.sln /p:CollectCoverage=true /p:CoverletOutput=../../Assets/Coverage/ /p:MergeWith="../../Assets/Coverage/coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1 --no-restore --verbosity normal
-
-      - name: LS
-        run: ls
 
       - name: Code coverage report
         uses: irongut/CodeCoverageSummary@v1.3.0
