@@ -30,6 +30,8 @@ public static class AppServicesConfiguration
     {
         services.AddValidatorsFromAssemblyContaining<CreateParticipantRequestValidator>();
 
+        ValidatorOptions.Global.LanguageManager.Culture = new System.Globalization.CultureInfo("en-US");
+
         return services;
     }
 
