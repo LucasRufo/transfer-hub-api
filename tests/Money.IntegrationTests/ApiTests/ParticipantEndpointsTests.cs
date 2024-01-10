@@ -9,7 +9,7 @@ namespace Money.IntegrationTests.ApiTests;
 public class ParticipantEndpointsTests : BaseIntegrationTests
 {
     private HttpClient _httpClient;
-    private const string _baseUri = "/api/participants";
+    private const string _baseUri = "/api/v1/participants";
 
 
     [SetUp]

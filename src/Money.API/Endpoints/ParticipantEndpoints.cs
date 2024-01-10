@@ -11,9 +11,13 @@ public static class ParticipantEndpoints
 {
     public static void AddParticipantEndpoints(this WebApplication app)
     {
-        var group = app.MapGroup("/api").WithOpenApi();
+        var participants = app.NewVersionedApi("Participants");
 
-        group.MapPost("/participants", async (CreateParticipantRequest request, IValidator<CreateParticipantRequest> validator, ParticipantService participantService, HttpContext context) => 
+        var participantsV1 = participants
+            .MapGroup("/api/v{version:apiVersion}")
+            .HasApiVersion(1);
+
+        participantsV1.MapPost("/participants", async (CreateParticipantRequest request, IValidator<CreateParticipantRequest> validator, ParticipantService participantService, HttpContext context) =>
         {
             var validationResult = await validator.ValidateAsync(request);
 
@@ -25,7 +29,7 @@ public static class ParticipantEndpoints
             if (createParticipantResult.IsError)
                 return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, createParticipantResult.FirstError));
 
-            return Results.Created($"/api/participants/{createParticipantResult.Value.Id}", createParticipantResult.Value);
+            return Results.Created($"/api/v1/participants/{createParticipantResult.Value.Id}", createParticipantResult.Value);
         });
     }
 }
