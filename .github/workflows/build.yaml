@@ -28,7 +28,7 @@ jobs:
       #   run: dotnet test --no-restore --verbosity normal
 
       - name: Run all tests
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=../Assets/Coverage/ /p:MergeWith="../Assets/Coverage/coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=../../Assets/Coverage/ /p:MergeWith="../../Assets/Coverage/coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1
 
       - name: Run all tests
         run: ls
