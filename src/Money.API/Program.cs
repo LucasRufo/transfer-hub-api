@@ -3,23 +3,31 @@ using Money.API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.AddMoneyDbContext(builder.Configuration);
-
-builder.Services.AddRepositories();
+ConfigureServices();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.AddParticipantEndpoints();
+ConfigureApp();
 
 app.Run();
+
+void ConfigureServices()
+{
+    builder.AddMoneyDbContext(builder.Configuration);
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddApplicationServices();
+}
+
+void ConfigureApp()
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.AddParticipantEndpoints();
+}
 
 public partial class Program { }
