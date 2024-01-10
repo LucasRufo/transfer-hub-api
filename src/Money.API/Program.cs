@@ -17,10 +17,13 @@ void ConfigureServices()
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddApplicationServices();
+    builder.Services.AddHealthCheck(builder.Configuration);
 }
 
 void ConfigureApp()
 {
+    app.UseHealthCheck();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
