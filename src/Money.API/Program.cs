@@ -1,4 +1,5 @@
 using Money.API.Configuration;
+using Money.API.Configuration.Swagger;
 using Money.API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,23 +15,19 @@ app.Run();
 void ConfigureServices()
 {
     builder.AddMoneyDbContext(builder.Configuration);
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwagger();
     builder.Services.AddApplicationServices();
     builder.Services.AddHealthCheck(builder.Configuration);
+    builder.Services.AddVersioning();
 }
 
 void ConfigureApp()
 {
+    var pathbase = builder.Configuration["PathBase"];
+    app.UsePathBase(pathbase);
     app.UseHealthCheck();
-
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
     app.AddParticipantEndpoints();
+    app.UseSwaggerCustom(pathbase ?? "");
 }
 
 public partial class Program { }
