@@ -35,7 +35,8 @@ public class DatabaseFixture
         {
             TablesToIgnore =
             [
-                "VersionInfo"
+                "VersionInfo",
+                "transaction_type"
             ],
             SchemasToInclude =
             [

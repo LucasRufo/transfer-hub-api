@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
-using Money.API.Requests;
+using Money.Domain.Requests;
 
 namespace Money.TestsShared.Builders.Domain.Requests;
 

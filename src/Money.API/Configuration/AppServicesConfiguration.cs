@@ -22,6 +22,7 @@ public static class AppServicesConfiguration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IParticipantRepository, ParticipantRepository>();
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         return services;
     }
@@ -30,7 +31,7 @@ public static class AppServicesConfiguration
     {
         services.AddValidatorsFromAssemblyContaining<CreateParticipantRequestValidator>();
 
-        ValidatorOptions.Global.LanguageManager.Culture = new System.Globalization.CultureInfo("en-US");
+        ValidatorOptions.Global.LanguageManager.Enabled = false;
 
         return services;
     }
@@ -38,6 +39,7 @@ public static class AppServicesConfiguration
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<ParticipantService>();
+        services.AddScoped<TransactionService>();
 
         return services;
     }

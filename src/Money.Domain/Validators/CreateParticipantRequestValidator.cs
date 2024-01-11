@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Money.API.Requests;
+using Money.Domain.Requests;
 
 namespace Money.Domain.Validators;
 
