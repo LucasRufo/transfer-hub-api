@@ -1,4 +1,4 @@
-﻿namespace Money.API.Requests;
+﻿namespace Money.Domain.Requests;
 
 public class CreateParticipantRequest
 {

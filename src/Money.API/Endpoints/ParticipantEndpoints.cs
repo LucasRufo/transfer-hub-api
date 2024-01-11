@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Money.API.Endpoints.Shared;
 using Money.API.Extensions;
-using Money.API.Requests;
+using Money.Domain.Requests;
 using Money.Domain.Services;
 using System.Net;
 
