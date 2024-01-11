@@ -11,5 +11,6 @@ public class TransactionMapping : IEntityTypeConfiguration<Transaction>
         builder.ToTable("transactions");
 
         builder.Property(x => x.Type).HasColumnName("transaction_type_id");
+        builder.Property(x => x.ParticipantId).HasColumnName("participant_id");
     }
 }

@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
-using Money.API.Requests;
 using Money.Domain.Entities;
 using Money.Domain.Providers.Datetime;
 using Money.Domain.Repositories;
+using Money.Domain.Requests;
 
 namespace Money.Domain.Services;
 
