@@ -22,4 +22,5 @@ public class MoneyContext : DbContext
     }
 
     public DbSet<Participant> Participant { get; set; }
+    public DbSet<Transaction> Transaction { get; set; }
 }
