@@ -17,13 +17,22 @@ public class TransactionEndpointsTests : BaseIntegrationTests
     }
 
     [Test]
-    public async Task CreditShouldReturnSuccess()
+    public async Task CreditShouldReturnSuccessAndTransaction()
     {
-        var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder().Generate();
+        var participant = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder()
+            .WithParticipantId(participant.Id)
+            .Generate();
 
         var response = await _httpClient.PostAsync($"{_baseUri}/credit", createCreditTransactionRequest.ToJsonContent());
 
+        var transactionFromDb = ContextForAsserts.Transaction.First();
+
+        var transaction = await response.Content.ReadFromJsonAsync<Transaction>();
+
         response.Should().HaveStatusCode(HttpStatusCode.OK);
+        transaction.Should().BeEquivalentTo(transactionFromDb);
     }
 
     [Test]

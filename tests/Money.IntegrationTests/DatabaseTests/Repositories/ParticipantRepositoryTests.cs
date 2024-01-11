@@ -31,4 +31,14 @@ public class ParticipantRepositoryTests : BaseIntegrationTests
 
         participantFromDb.Should().BeEquivalentTo(participant);
     }
+
+    [Test]
+    public async Task ShouldGetParticipantById()
+    {
+        var participantFromDb = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var participant = await _participantRepository.GetById(participantFromDb.Id);
+
+        participantFromDb.Should().BeEquivalentTo(participant);
+    }
 }

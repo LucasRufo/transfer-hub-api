@@ -7,6 +7,11 @@ public class Transaction
     public Guid ParticipantId { get; set; }
     public required decimal Amount { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public Transaction()
+    {
+        Id = Guid.NewGuid();
+    }
 }
 
 public enum TransactionType

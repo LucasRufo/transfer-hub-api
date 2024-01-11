@@ -8,7 +8,7 @@ public class CreateCreditTransactionRequestBuilder : Faker<CreateCreditTransacti
     public CreateCreditTransactionRequestBuilder()
     {
         RuleFor(x => x.ParticipantId, faker => faker.Random.Guid());
-        RuleFor(x => x.Amount, faker => faker.Random.Decimal());
+        RuleFor(x => x.Amount, faker => Math.Round(faker.Random.Decimal(), 2));
     }
 
     public CreateCreditTransactionRequestBuilder WithParticipantId(Guid id)

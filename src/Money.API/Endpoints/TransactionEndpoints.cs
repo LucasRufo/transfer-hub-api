@@ -2,6 +2,8 @@
 using Money.API.Endpoints.Shared;
 using Money.API.Extensions;
 using Money.Domain.Requests;
+using Money.Domain.Services;
+using System.Net;
 
 namespace Money.API.Endpoints;
 
@@ -15,14 +17,19 @@ public static class TransactionEndpoints
             .MapGroup("/api/v{version:apiVersion}")
             .HasApiVersion(1);
 
-        transactionsV1.MapPost("/transactions/credit", async (CreateCreditTransactionRequest request, IValidator<CreateCreditTransactionRequest> validator, HttpContext context) =>
+        transactionsV1.MapPost("/transactions/credit", async (CreateCreditTransactionRequest request, IValidator<CreateCreditTransactionRequest> validator, TransactionService transactionService, HttpContext context) =>
         {
             var validationResult = await validator.ValidateAsync(request);
 
             if (!validationResult.IsValid)
                 return Results.BadRequest(CustomProblemDetails.CreateValidationProblemDetails(context.Request.Path, validationResult.ToCustomProblemDetailsError()));
 
-            return Results.Ok();
+            var creditTransactionResult = await transactionService.Credit(request);
+
+            if (creditTransactionResult.IsError)
+                return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, creditTransactionResult.FirstError));
+
+            return Results.Ok(creditTransactionResult.Value);
         });
     }
 }

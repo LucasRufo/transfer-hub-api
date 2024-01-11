@@ -16,4 +16,7 @@ public class ParticipantRepository(MoneyContext context) : IParticipantRepositor
 
     public virtual async Task<Participant?> GetByCPF(string cpf)
         => await _context.Participant.FirstOrDefaultAsync(x => x.CPF == cpf);
+
+    public virtual async Task<Participant?> GetById(Guid id)
+        => await _context.Participant.FirstOrDefaultAsync(x => x.Id == id);
 }
