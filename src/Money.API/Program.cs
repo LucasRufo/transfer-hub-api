@@ -27,6 +27,7 @@ void ConfigureApp()
     app.UsePathBase(pathbase);
     app.UseHealthCheck();
     app.AddParticipantEndpoints();
+    app.AddTransactionEndpoints();
     app.UseSwaggerCustom(pathbase ?? "");
 }
 
