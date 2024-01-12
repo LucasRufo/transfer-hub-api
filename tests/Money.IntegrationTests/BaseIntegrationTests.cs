@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using FluentAssertions;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Money.Infrastructure;
 using Money.IntegrationTests.ApiTests;
@@ -24,6 +24,8 @@ public class BaseIntegrationTests
         TestApi = new TestApplication();
         ServiceProvider = TestApi.Services;
         Faker = new Faker();
+
+        ValidatorOptions.Global.LanguageManager.Enabled = false;
     }
 
     [SetUp]
@@ -39,6 +41,7 @@ public class BaseIntegrationTests
         {
             options.Using<DateTime>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTime>();
             options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>();
+
             return options;
         });
     }

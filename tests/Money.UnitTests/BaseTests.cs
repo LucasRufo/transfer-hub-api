@@ -1,5 +1,6 @@
 ﻿using Autofac.Extras.FakeItEasy;
 using Bogus;
+using FluentValidation;
 
 namespace Money.UnitTests;
 
@@ -13,6 +14,8 @@ public class BaseTests
     {
         Faker = new();
         AutoFake = new();
+
+        ValidatorOptions.Global.LanguageManager.Enabled = false;
 
         AssertionOptions.AssertEquivalencyUsing(options =>
         {
