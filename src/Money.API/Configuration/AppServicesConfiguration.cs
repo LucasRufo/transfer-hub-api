@@ -29,9 +29,9 @@ public static class AppServicesConfiguration
 
     private static IServiceCollection AddValidators(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining<CreateParticipantRequestValidator>();
-
         ValidatorOptions.Global.LanguageManager.Enabled = false;
+
+        services.AddValidatorsFromAssemblyContaining<CreateParticipantRequestValidator>();
 
         return services;
     }
