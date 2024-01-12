@@ -15,6 +15,7 @@ app.Run();
 void ConfigureServices()
 {
     builder.AddMoneyDbContext(builder.Configuration);
+    builder.Services.AddProblemDetails();
     builder.Services.AddSwagger();
     builder.Services.AddApplicationServices();
     builder.Services.AddHealthCheck(builder.Configuration);
@@ -23,6 +24,7 @@ void ConfigureServices()
 
 void ConfigureApp()
 {
+    app.UseExceptionHandler();
     var pathbase = builder.Configuration["PathBase"];
     app.UsePathBase(pathbase);
     app.UseHealthCheck();
