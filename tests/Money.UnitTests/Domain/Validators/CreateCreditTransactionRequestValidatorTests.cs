@@ -33,4 +33,19 @@ public class CreateCreditTransactionRequestValidatorTests : BaseTests
         validate.ShouldHaveValidationErrorFor(x => x.Amount)
             .WithErrorMessage($"'Amount' must be greater than '0'.");
     }
+
+    [Test]
+    public void ShouldNotBeValidWhenAmountHasInvalidPrecision()
+    {
+        var amount = 55.999M;
+
+        var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder()
+            .WithAmount(amount)
+            .Generate();
+
+        var validate = _validator.TestValidate(createCreditTransactionRequest);
+
+        validate.ShouldHaveValidationErrorFor(x => x.Amount)
+            .WithErrorMessage($"'Amount' must not be more than 8 digits in total, with allowance for 2 decimals. 2 digits and 3 decimals were found.");
+    }
 }
