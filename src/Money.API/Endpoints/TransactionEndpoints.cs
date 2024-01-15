@@ -31,6 +31,16 @@ public static class TransactionEndpoints
 
             return Results.Ok(creditTransactionResult.Value);
         });
+
+        transactionsV1.MapPost("/transactions/transfer", async (TransferRequest request, IValidator<TransferRequest> validator, TransactionService transactionService, HttpContext context) =>
+        {
+            var validationResult = await validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+                return Results.BadRequest(CustomProblemDetails.CreateValidationProblemDetails(context.Request.Path, validationResult.ToCustomProblemDetailsError()));
+
+            return Results.Ok();
+        });
     }
 }
 
