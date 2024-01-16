@@ -24,12 +24,15 @@ public class TransactionService(
             return Error.Failure("ParticipantNotFound", $"The participant with Id {createCreditTransactionRequest.ParticipantId} was not found.");
         }
 
+        participant.IncreaseBalance(createCreditTransactionRequest.Amount);
+
         var transaction = new Transaction()
         {
             Amount = createCreditTransactionRequest.Amount,
             Type = TransactionType.Credit,
             ParticipantId = participant.Id,
-            CreatedAt = _dateTimeProvider.UtcNow
+            CreatedAt = _dateTimeProvider.UtcNow,
+            Participant = participant
         };
 
         await _transactionRepository.Save(transaction);

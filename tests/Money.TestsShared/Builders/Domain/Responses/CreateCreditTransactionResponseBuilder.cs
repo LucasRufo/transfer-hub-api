@@ -1,52 +1,46 @@
 ﻿using Bogus;
-using Money.Domain.Entities;
+using Money.Domain.Responses;
 
-namespace Money.TestsShared.Builders.Domain.Entities;
+namespace Money.TestsShared.Builders.Domain.Responses;
 
-public class TransactionBuilder : Faker<Transaction>
+public class CreateCreditTransactionResponseBuilder : Faker<CreateCreditTransactionResponse>
 {
-    public TransactionBuilder()
+    public CreateCreditTransactionResponseBuilder()
     {
         RuleFor(x => x.Id, faker => faker.Random.Guid());
-        RuleFor(x => x.Type, faker => faker.PickRandom<TransactionType>());
+        RuleFor(x => x.Type, faker => faker.Random.String());
         RuleFor(x => x.Amount, faker => Math.Round(faker.Random.Decimal(), 2));
         RuleFor(x => x.ParticipantId, faker => faker.Random.Guid());
         RuleFor(x => x.CreatedAt, faker => faker.Date.Recent().ToUniversalTime());
     }
 
-    public TransactionBuilder WithId(Guid id)
+    public CreateCreditTransactionResponseBuilder WithId(Guid id)
     {
         RuleFor(x => x.Id, faker => id);
         return this;
     }
 
-    public TransactionBuilder WithType(TransactionType type)
+    public CreateCreditTransactionResponseBuilder WithType(string type)
     {
         RuleFor(x => x.Type, faker => type);
         return this;
     }
 
-    public TransactionBuilder WithAmount(decimal amount)
+    public CreateCreditTransactionResponseBuilder WithAmount(decimal amount)
     {
         RuleFor(x => x.Amount, faker => amount);
         return this;
     }
 
-    public TransactionBuilder WithParticipantId(Guid participantId)
+    public CreateCreditTransactionResponseBuilder WithParticipantId(Guid participantId)
     {
         RuleFor(x => x.ParticipantId, faker => participantId);
         return this;
     }
 
-    public TransactionBuilder WithCreatedAt(DateTime datetime)
+    public CreateCreditTransactionResponseBuilder WithCreatedAt(DateTime datetime)
     {
         RuleFor(x => x.CreatedAt, faker => datetime);
-        return this;
-    }
-
-    public TransactionBuilder WithParticipant(Participant participant)
-    {
-        RuleFor(x => x.Participant, faker => participant);
         return this;
     }
 }

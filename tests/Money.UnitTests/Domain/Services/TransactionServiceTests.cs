@@ -47,6 +47,7 @@ public class TransactionServiceTests : BaseTests
             .WithParticipantId(createCreditTransactionRequest.ParticipantId)
             .WithType(TransactionType.Credit)
             .WithCreatedAt(createdAtFake)
+            .WithParticipant(participant)
             .Generate();
 
         transactionResult.IsError.Should().BeFalse();

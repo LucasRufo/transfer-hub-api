@@ -1,6 +1,8 @@
 ﻿using Money.API.Endpoints.Shared;
 using Money.Domain.Entities;
+using Money.Domain.Responses;
 using Money.TestsShared.Builders.Domain.Requests;
+using Money.TestsShared.Builders.Domain.Responses;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -29,10 +31,12 @@ public class TransactionEndpointsTests : BaseIntegrationTests
 
         var transactionFromDb = ContextForAsserts.Transaction.First();
 
-        var transaction = await response.Content.ReadFromJsonAsync<Transaction>();
+        var transaction = new CreateCreditTransactionResponse(transactionFromDb);
+
+        var transactionResponse = await response.Content.ReadFromJsonAsync<CreateCreditTransactionResponse>();
 
         response.Should().HaveStatusCode(HttpStatusCode.OK);
-        transaction.Should().BeEquivalentTo(transactionFromDb);
+        transactionResponse.Should().BeEquivalentTo(transaction);
     }
 
     [Test]
