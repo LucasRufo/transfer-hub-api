@@ -25,4 +25,20 @@ public class TransactionRepositoryTests : BaseIntegrationTests
 
         transaction.Should().BeEquivalentTo(transactionFromDatabase);
     }
+
+    [Test]
+    public async Task ShouldSaveMultipleTransactions()
+    {
+        var participant = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var transactions = new TransactionBuilder()
+            .WithParticipantId(participant.Id)
+            .Generate(3);
+
+        await _transactionRepository.Save(transactions);
+
+        var transactionsFromDatabase = ContextForAsserts.Transaction.ToList();
+
+        transactions.Should().BeEquivalentTo(transactionsFromDatabase);
+    }
 }

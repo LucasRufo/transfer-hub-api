@@ -10,6 +10,7 @@ public class ParticipantBuilder : Faker<Participant>
         RuleFor(x => x.Id, faker => faker.Random.Guid());
         RuleFor(x => x.Name, faker => faker.Person.FullName);
         RuleFor(x => x.CPF, faker => faker.Random.ReplaceNumbers("###########"));
+        RuleFor(x => x.Balance, faker => Math.Round(faker.Random.Decimal(), 2));
         RuleFor(x => x.CreatedAt, faker => faker.Date.Recent().ToUniversalTime());
         RuleFor(x => x.UpdatedAt, faker => faker.Date.Recent().ToUniversalTime());
     }
@@ -29,6 +30,12 @@ public class ParticipantBuilder : Faker<Participant>
     public ParticipantBuilder WithCPF(string cpf)
     {
         RuleFor(x => x.CPF, faker => cpf);
+        return this;
+    }
+
+    public ParticipantBuilder WithBalance(decimal balance)
+    {
+        RuleFor(x => x.Balance, faker => balance);
         return this;
     }
 

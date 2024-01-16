@@ -40,7 +40,12 @@ public static class TransactionEndpoints
             if (!validationResult.IsValid)
                 return Results.BadRequest(CustomProblemDetails.CreateValidationProblemDetails(context.Request.Path, validationResult.ToCustomProblemDetailsError()));
 
-            return Results.Ok();
+            var transferResult = await transactionService.Transfer(request);
+
+            if (transferResult.IsError)
+                return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, transferResult.FirstError));
+
+            return Results.Ok(new TransferResponse(transferResult.Value));
         });
     }
 }

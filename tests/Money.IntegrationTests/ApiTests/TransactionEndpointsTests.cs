@@ -84,11 +84,28 @@ public class TransactionEndpointsTests : BaseIntegrationTests
     [Test]
     public async Task TransferShouldReturnSuccess()
     {
-        var transferRequest = new TransferRequestBuilder().Generate();
+        var fromParticipant = new ParticipantBuilder()
+            .WithBalance(10)
+            .GenerateInDatabase(Context);
+
+        var toParticipant = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var transferRequest = new TransferRequestBuilder()
+            .WithFromParticipantId(fromParticipant.Id)
+            .WithToParticipantId(toParticipant.Id)
+            .WithAmount(10)
+            .Generate();
 
         var response = await _httpClient.PostAsync($"{_baseUri}/transfer", transferRequest.ToJsonContent());
 
+        var transferFromDb = ContextForAsserts.Transfer.First();
+
+        var transfer = new TransferResponse(transferFromDb);
+
+        var transferResponse = await response.Content.ReadFromJsonAsync<TransferResponse>();
+
         response.Should().HaveStatusCode(HttpStatusCode.OK);
+        transferResponse.Should().BeEquivalentTo(transfer);
     }
 
     [Test]
@@ -110,6 +127,26 @@ public class TransactionEndpointsTests : BaseIntegrationTests
             });
 
         response.Should().HaveStatusCode(HttpStatusCode.BadRequest);
+        problemDetails.Should().BeEquivalentTo(customProblemDetailsExpected, ctx => ctx.Excluding(p => p.Type));
+    }
+
+    [Test]
+    public async Task TransferShouldReturnUnprocessableEntityWhenServiceFails()
+    {
+        var transferRequest = new TransferRequestBuilder().Generate();
+
+        var response = await _httpClient.PostAsync($"{_baseUri}/transfer", transferRequest.ToJsonContent());
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
+
+        var error = Error.Failure("ParticipantNotFound", $"The participant with Id {transferRequest.FromParticipantId} was not found.");
+
+        var customProblemDetailsExpected = CustomProblemDetails.CreateDomainProblemDetails(
+            HttpStatusCode.UnprocessableEntity,
+            $"{_baseUri}/transfer",
+            error);
+
+        response.Should().HaveStatusCode(HttpStatusCode.UnprocessableEntity);
         problemDetails.Should().BeEquivalentTo(customProblemDetailsExpected, ctx => ctx.Excluding(p => p.Type));
     }
 }

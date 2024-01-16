@@ -37,6 +37,7 @@ public class ParticipantServiceTests : BaseTests
             .WithId(participantResult.Value.Id)
             .WithName(createParticipantRequest.Name)
             .WithCPF(createParticipantRequest.CPF)
+            .WithBalance(0M)
             .WithCreatedAt(createdAtFake)
             .WithUpdateAt(null)
             .Generate();

@@ -3,9 +3,14 @@
 public class Transfer
 {
     public Guid Id { get; set; }
-    public Guid FromParticipantId { get; set; }
-    public Guid ToParticipantId { get; set; }
-    public decimal Amount { get; set; }
+    public required Guid FromParticipantId { get; set; }
+    public required Guid ToParticipantId { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public Transaction Transaction { get; set; } = null!;
+    public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+
+    public Transfer()
+    {
+        Id = Guid.NewGuid();
+    }
 }

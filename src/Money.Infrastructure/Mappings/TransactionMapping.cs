@@ -19,8 +19,8 @@ public class TransactionMapping : IEntityTypeConfiguration<Transaction>
             .HasPrincipalKey(e => e.Id);
 
         builder.HasOne(e => e.Transfer)
-            .WithOne(e => e.Transaction)
-            .HasForeignKey<Transaction>(e => e.TransferId)
-            .HasPrincipalKey<Transfer>(e => e.Id);
+            .WithMany(e => e.Transactions)
+            .HasForeignKey(e => e.TransferId)
+            .HasPrincipalKey(e => e.Id);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Money.Domain.Entities;
+﻿using Money.Domain.Requests;
+
+namespace Money.Domain.Entities;
 
 public class Participant
 {
@@ -20,5 +22,15 @@ public class Participant
     public void IncreaseBalance(decimal amount)
     {
         Balance += amount;
+    }
+
+    public bool TryDecreaseBalance(decimal amount)
+    {
+        if (Balance < amount)
+            return false;
+
+        Balance -= amount;
+
+        return true;
     }
 }
