@@ -1,5 +1,6 @@
 ﻿using Money.API.Endpoints.Shared;
 using Money.Domain.Entities;
+using Money.Domain.Responses;
 using Money.TestsShared.Builders.Domain.Requests;
 using System.Net;
 using System.Net.Http.Json;
@@ -10,7 +11,6 @@ public class ParticipantEndpointsTests : BaseIntegrationTests
 {
     private HttpClient _httpClient;
     private const string _baseUri = "/api/v1/participants";
-
 
     [SetUp]
     public void SetUp()
@@ -27,10 +27,12 @@ public class ParticipantEndpointsTests : BaseIntegrationTests
 
         var participantFromDb = ContextForAsserts.Participant.First();
 
-        var participantFromResponse = await response.Content.ReadFromJsonAsync<Participant>();
+        var participant = new CreateParticipantResponse(participantFromDb);
+
+        var participantFromResponse = await response.Content.ReadFromJsonAsync<CreateParticipantResponse>();
 
         response.Should().HaveStatusCode(HttpStatusCode.Created);
-        participantFromResponse.Should().BeEquivalentTo(participantFromDb);
+        participantFromResponse.Should().BeEquivalentTo(participant);
     }
 
     [Test]

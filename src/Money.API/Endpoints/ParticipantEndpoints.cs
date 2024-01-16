@@ -2,6 +2,7 @@
 using Money.API.Endpoints.Shared;
 using Money.API.Extensions;
 using Money.Domain.Requests;
+using Money.Domain.Responses;
 using Money.Domain.Services;
 using System.Net;
 
@@ -29,7 +30,7 @@ public static class ParticipantEndpoints
             if (createParticipantResult.IsError)
                 return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, createParticipantResult.FirstError));
 
-            return Results.Created($"/api/v1/participants/{createParticipantResult.Value.Id}", createParticipantResult.Value);
+            return Results.Created($"/api/v1/participants/{createParticipantResult.Value.Id}", new CreateParticipantResponse(createParticipantResult.Value));
         });
     }
 }
