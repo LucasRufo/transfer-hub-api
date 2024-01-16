@@ -2,7 +2,7 @@
 
 namespace Money.Migrations.Migrations;
 
-[Migration(4)]
+[Migration(5)]
 public class CreateTransactionsTable : Migration
 {
     const string tableName = "transactions";
@@ -12,6 +12,7 @@ public class CreateTransactionsTable : Migration
             .WithColumn("id").AsGuid().NotNullable().PrimaryKey()
             .WithColumn("transaction_type_id").AsByte().NotNullable().ForeignKey("transaction_type", "id")
             .WithColumn("participant_id").AsGuid().NotNullable().ForeignKey("participants", "id")
+            .WithColumn("transfer_id").AsGuid().Nullable().ForeignKey("transfers", "id")
             .WithColumn("amount").AsDecimal(8, 2).NotNullable()
             .WithColumn("created_at").AsDateTime().NotNullable();
     }

@@ -7,8 +7,6 @@ public class CreateParticipantRequestValidator : AbstractValidator<CreatePartici
 {
     public CreateParticipantRequestValidator()
     {
-        RuleLevelCascadeMode = CascadeMode.Stop;
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(200);

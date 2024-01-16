@@ -67,8 +67,6 @@ public class ParticipantEndpointsTests : BaseIntegrationTests
 
         var response = await _httpClient.PostAsync(_baseUri, createParticipantRequest.ToJsonContent());
 
-        var t = await response.Content.ReadAsStringAsync();
-
         var problemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
 
         var error = Error.Failure("ParticipantAlreadyExists", "A participant with this CPF already exists.");

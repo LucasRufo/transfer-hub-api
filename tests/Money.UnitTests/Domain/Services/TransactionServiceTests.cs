@@ -21,7 +21,7 @@ public class TransactionServiceTests : BaseTests
     }
 
     [Test]
-    public async Task ShouldCreateTransaction()
+    public async Task CreditShouldCreateTransaction()
     {
         var participant = new ParticipantBuilder().Generate();
         var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder()
@@ -47,6 +47,7 @@ public class TransactionServiceTests : BaseTests
             .WithParticipantId(createCreditTransactionRequest.ParticipantId)
             .WithType(TransactionType.Credit)
             .WithCreatedAt(createdAtFake)
+            .WithParticipant(participant)
             .Generate();
 
         transactionResult.IsError.Should().BeFalse();
@@ -54,7 +55,7 @@ public class TransactionServiceTests : BaseTests
     }
 
     [Test]
-    public async Task ShouldReturnErrorWhenParticipantIsNotFound()
+    public async Task CreditShouldReturnErrorWhenParticipantIsNotFound()
     {
         var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder()
             .Generate();
@@ -63,12 +64,134 @@ public class TransactionServiceTests : BaseTests
             .Resolve<IParticipantRepository>().GetById(createCreditTransactionRequest.ParticipantId))
             .Returns<Participant?>(null);
 
-        var participantResult = await AutoFake.Resolve<TransactionService>()
+        var transactionResult = await AutoFake.Resolve<TransactionService>()
             .Credit(createCreditTransactionRequest);
 
         var error = Error.Failure("ParticipantNotFound", $"The participant with Id {createCreditTransactionRequest.ParticipantId} was not found.");
 
-        participantResult.IsError.Should().BeTrue();
-        participantResult.FirstError.Should().BeEquivalentTo(error);
+        transactionResult.IsError.Should().BeTrue();
+        transactionResult.FirstError.Should().BeEquivalentTo(error);
+    }
+
+    [Test]
+    public async Task TransferShouldCreateTransactionsAndTransfer()
+    {
+        var fromParticipant = new ParticipantBuilder()
+            .WithBalance(10)
+            .Generate();
+
+        var toParticipant = new ParticipantBuilder().Generate();
+
+        var transferRequest = new TransferRequestBuilder()
+            .WithFromParticipantId(fromParticipant.Id)
+            .WithToParticipantId(toParticipant.Id)
+            .WithAmount(10)
+            .Generate();
+
+        var createdAtFake = Faker.Date.Past();
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.FromParticipantId))
+            .Returns(fromParticipant);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.ToParticipantId))
+            .Returns(toParticipant);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IDateTimeProvider>().UtcNow)
+            .Returns(createdAtFake);
+
+        var transferResult = await AutoFake.Resolve<TransactionService>()
+            .Transfer(transferRequest);
+
+        var expectedTransfer = new TransferBuilder()
+            .WithId(transferResult.Value.Id)
+            .WithFromParticipantId(transferRequest.FromParticipantId)
+            .WithToParticipantId(transferRequest.ToParticipantId)
+            .WithCreatedAt(createdAtFake)
+            .Generate();
+
+        transferResult.IsError.Should().BeFalse();
+        transferResult.Value.Should().BeEquivalentTo(expectedTransfer);
+    }
+
+    [Test]
+    public async Task TransferShouldReturnErrorWhenFromParticipantIsNotFound()
+    {
+        var transferRequest = new TransferRequestBuilder()
+            .Generate();
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.FromParticipantId))
+            .Returns<Participant?>(null);
+
+        var transferResult = await AutoFake.Resolve<TransactionService>()
+            .Transfer(transferRequest);
+
+        var error = Error.Failure("ParticipantNotFound", $"The participant with Id {transferRequest.FromParticipantId} was not found.");
+
+        transferResult.IsError.Should().BeTrue();
+        transferResult.FirstError.Should().BeEquivalentTo(error);
+    }
+
+    [Test]
+    public async Task TransferShouldReturnErrorWhenToParticipantIsNotFound()
+    {
+        var fromParticipant = new ParticipantBuilder().Generate();
+
+        var transferRequest = new TransferRequestBuilder()
+            .WithFromParticipantId(fromParticipant.Id)
+            .Generate();
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.FromParticipantId))
+            .Returns(fromParticipant);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.ToParticipantId))
+            .Returns<Participant?>(null);
+
+        var transferResult = await AutoFake.Resolve<TransactionService>()
+            .Transfer(transferRequest);
+
+        var error = Error.Failure("ParticipantNotFound", $"The participant with Id {transferRequest.ToParticipantId} was not found.");
+
+        transferResult.IsError.Should().BeTrue();
+        transferResult.FirstError.Should().BeEquivalentTo(error);
+    }
+
+    [Test]
+    public async Task TransferShouldReturnErrorWhenFromParticipantHasInsufficientBalance()
+    {
+        var fromParticipant = new ParticipantBuilder()
+            .WithBalance(10)
+            .Generate();
+
+        var toParticipant = new ParticipantBuilder().Generate();
+
+        var transferRequest = new TransferRequestBuilder()
+            .WithFromParticipantId(fromParticipant.Id)
+            .WithToParticipantId(toParticipant.Id)
+            .WithAmount(50)
+            .Generate();
+
+        var createdAtFake = Faker.Date.Past();
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.FromParticipantId))
+            .Returns(fromParticipant);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(transferRequest.ToParticipantId))
+            .Returns(toParticipant);
+
+        var transferResult = await AutoFake.Resolve<TransactionService>()
+            .Transfer(transferRequest);
+
+        var error = Error.Failure("InsufficientBalance", $"The participant doesn't have enough balance for the transfer.");
+
+        transferResult.IsError.Should().BeTrue();
+        transferResult.FirstError.Should().BeEquivalentTo(error);
     }
 }

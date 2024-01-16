@@ -1,6 +1,8 @@
 ﻿using Money.API.Endpoints.Shared;
 using Money.Domain.Entities;
+using Money.Domain.Responses;
 using Money.TestsShared.Builders.Domain.Requests;
+using Money.TestsShared.Builders.Domain.Responses;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -29,14 +31,16 @@ public class TransactionEndpointsTests : BaseIntegrationTests
 
         var transactionFromDb = ContextForAsserts.Transaction.First();
 
-        var transaction = await response.Content.ReadFromJsonAsync<Transaction>();
+        var transaction = new CreateCreditTransactionResponse(transactionFromDb);
+
+        var transactionResponse = await response.Content.ReadFromJsonAsync<CreateCreditTransactionResponse>();
 
         response.Should().HaveStatusCode(HttpStatusCode.OK);
-        transaction.Should().BeEquivalentTo(transactionFromDb);
+        transactionResponse.Should().BeEquivalentTo(transaction);
     }
 
     [Test]
-    public async Task CreateShouldReturnBadRequestWhenRequestIsInvalid()
+    public async Task CreditShouldReturnBadRequestWhenRequestIsInvalid()
     {
         var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder()
             .WithAmount(0)
@@ -54,6 +58,95 @@ public class TransactionEndpointsTests : BaseIntegrationTests
             });
 
         response.Should().HaveStatusCode(HttpStatusCode.BadRequest);
+        problemDetails.Should().BeEquivalentTo(customProblemDetailsExpected, ctx => ctx.Excluding(p => p.Type));
+    }
+
+    [Test]
+    public async Task CreditShouldReturnUnprocessableEntityWhenServiceFails()
+    {
+        var createCreditTransactionRequest = new CreateCreditTransactionRequestBuilder().Generate();
+
+        var response = await _httpClient.PostAsync($"{_baseUri}/credit", createCreditTransactionRequest.ToJsonContent());
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
+
+        var error = Error.Failure("ParticipantNotFound", $"The participant with Id {createCreditTransactionRequest.ParticipantId} was not found.");
+
+        var customProblemDetailsExpected = CustomProblemDetails.CreateDomainProblemDetails(
+            HttpStatusCode.UnprocessableEntity,
+            $"{_baseUri}/credit",
+            error);
+
+        response.Should().HaveStatusCode(HttpStatusCode.UnprocessableEntity);
+        problemDetails.Should().BeEquivalentTo(customProblemDetailsExpected, ctx => ctx.Excluding(p => p.Type));
+    }
+
+    [Test]
+    public async Task TransferShouldReturnSuccess()
+    {
+        var fromParticipant = new ParticipantBuilder()
+            .WithBalance(10)
+            .GenerateInDatabase(Context);
+
+        var toParticipant = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var transferRequest = new TransferRequestBuilder()
+            .WithFromParticipantId(fromParticipant.Id)
+            .WithToParticipantId(toParticipant.Id)
+            .WithAmount(10)
+            .Generate();
+
+        var response = await _httpClient.PostAsync($"{_baseUri}/transfer", transferRequest.ToJsonContent());
+
+        var transferFromDb = ContextForAsserts.Transfer.First();
+
+        var transfer = new TransferResponse(transferFromDb);
+
+        var transferResponse = await response.Content.ReadFromJsonAsync<TransferResponse>();
+
+        response.Should().HaveStatusCode(HttpStatusCode.OK);
+        transferResponse.Should().BeEquivalentTo(transfer);
+    }
+
+    [Test]
+    public async Task TransferShouldReturnBadRequestWhenRequestIsInvalid()
+    {
+        var transferRequest = new TransferRequestBuilder()
+            .WithAmount(0)
+            .Generate();
+
+        var response = await _httpClient.PostAsync($"{_baseUri}/transfer", transferRequest.ToJsonContent());
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
+
+        var customProblemDetailsExpected = CustomProblemDetails.CreateValidationProblemDetails(
+            $"{_baseUri}/transfer",
+            new List<CustomProblemDetailsError>()
+            {
+                new("Amount", "'Amount' must be greater than '0'.")
+            });
+
+        response.Should().HaveStatusCode(HttpStatusCode.BadRequest);
+        problemDetails.Should().BeEquivalentTo(customProblemDetailsExpected, ctx => ctx.Excluding(p => p.Type));
+    }
+
+    [Test]
+    public async Task TransferShouldReturnUnprocessableEntityWhenServiceFails()
+    {
+        var transferRequest = new TransferRequestBuilder().Generate();
+
+        var response = await _httpClient.PostAsync($"{_baseUri}/transfer", transferRequest.ToJsonContent());
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
+
+        var error = Error.Failure("ParticipantNotFound", $"The participant with Id {transferRequest.FromParticipantId} was not found.");
+
+        var customProblemDetailsExpected = CustomProblemDetails.CreateDomainProblemDetails(
+            HttpStatusCode.UnprocessableEntity,
+            $"{_baseUri}/transfer",
+            error);
+
+        response.Should().HaveStatusCode(HttpStatusCode.UnprocessableEntity);
         problemDetails.Should().BeEquivalentTo(customProblemDetailsExpected, ctx => ctx.Excluding(p => p.Type));
     }
 }

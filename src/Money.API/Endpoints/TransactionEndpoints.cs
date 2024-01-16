@@ -2,6 +2,7 @@
 using Money.API.Endpoints.Shared;
 using Money.API.Extensions;
 using Money.Domain.Requests;
+using Money.Domain.Responses;
 using Money.Domain.Services;
 using System.Net;
 
@@ -29,7 +30,22 @@ public static class TransactionEndpoints
             if (creditTransactionResult.IsError)
                 return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, creditTransactionResult.FirstError));
 
-            return Results.Ok(creditTransactionResult.Value);
+            return Results.Ok(new CreateCreditTransactionResponse(creditTransactionResult.Value));
+        });
+
+        transactionsV1.MapPost("/transactions/transfer", async (TransferRequest request, IValidator<TransferRequest> validator, TransactionService transactionService, HttpContext context) =>
+        {
+            var validationResult = await validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+                return Results.BadRequest(CustomProblemDetails.CreateValidationProblemDetails(context.Request.Path, validationResult.ToCustomProblemDetailsError()));
+
+            var transferResult = await transactionService.Transfer(request);
+
+            if (transferResult.IsError)
+                return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, transferResult.FirstError));
+
+            return Results.Ok(new TransferResponse(transferResult.Value));
         });
     }
 }

@@ -12,4 +12,10 @@ public class TransactionRepository(MoneyContext context) : ITransactionRepositor
         await _context.Transaction.AddAsync(transaction);
         await _context.SaveChangesAsync();
     }
+
+    public async Task Save(List<Transaction> transactions)
+    {
+        await _context.Transaction.AddRangeAsync(transactions);
+        await _context.SaveChangesAsync();
+    }
 }
