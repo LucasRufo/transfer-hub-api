@@ -12,9 +12,9 @@ Feel free to leave suggestions or to make a contribution.
 
 The project is using .NET 8 with Minimal APIs and PostgreSQL for the database. It has unit and integration tests using NUnit and uses some common libraries from the .NET ecosystem like Entity Framework, Fluent Validation, Fluent Assertions and Bogus.
 
-For the integration tests, it uses the built-in `WebApplicationFactory` from .NET and uses [TestContainers](https://testcontainers.com/) to spin a PostgreSQL Docker container.
+For the integration tests, it uses the built-in `WebApplicationFactory` from .NET and uses [TestContainers](https://testcontainers.com/) to spin up a PostgreSQL Docker container.
 
-As for database migrations, I've opted to create a separate project that acts as a Command Line tool, facilitating the process of running migrations on a pipeline. The project is using Fluent Migrator to describe and execute the migrations. 
+As for database migrations, I've opted to create a separate project that acts as a Command Line Tool, facilitating the process of running migrations on a pipeline. The project is using Fluent Migrator to describe and execute the migrations. 
 
 ## Architecture
 
@@ -66,6 +66,8 @@ Transfer money from one participant to another.
 
 - Add Kubernetes support
 - Load testing with K6
+- Create a production environment using Terraform
+- Deploy the app to Azure
 
 ## License
 
