@@ -18,7 +18,9 @@ As for database migrations, I've opted to create a separate project that acts as
 
 ## Architecture
 
-![Diagram showing the dependencies flow](./images/dependencies-diagram.png)
+<p align="center">
+  <img src="./images/dependencies-diagram.png" />
+</p>
 
 This diagram shows all the dependencies and how they interact, I decided to isolate my Domain layer to promote maintainability and testability. As for database interactions, only the infrastructure and the migrations project can create connections. 
 
