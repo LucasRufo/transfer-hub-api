@@ -4,8 +4,6 @@
   <img src="./images/transfer-hub-icon.png" />
 </p>
 
-## Project
-
 TransferHub is an HTTP API that exposes endpoints for participant registration, individual account deposits, statements, and transfers between participants. My intention with TransferHub is to showcase a production-level project on GitHub, utilizing the tools with which I have the most experience.
 
 Feel free to leave suggestions or to make a contribution.
