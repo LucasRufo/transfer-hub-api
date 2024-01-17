@@ -30,7 +30,7 @@ This diagram shows all the dependencies and how they interact, I decided to isol
 
 #### Create Participant
 
-Create a new participant. 
+Creates a new participant. 
 
 ```http
   POST /api/v1/participants
@@ -48,7 +48,7 @@ Gets a statement with transactions from a participant.
 
 #### Credit 
 
-Create a new deposit for a participant.
+Creates a new deposit for a participant.
 
 ```http
   POST /api/v1/transactions/credit
@@ -56,7 +56,7 @@ Create a new deposit for a participant.
 
 #### Transfer
 
-Transfer money from one participant to another.
+Transfers money from one participant to another.
 
 ```http
   POST /api/v1/transactions/transfer
