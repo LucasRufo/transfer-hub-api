@@ -3,6 +3,7 @@ using Money.Domain.Entities;
 using Money.Domain.Providers.Datetime;
 using Money.Domain.Repositories;
 using Money.Domain.Requests;
+using Money.Domain.Responses;
 
 namespace Money.Domain.Services;
 public class TransactionService(
@@ -24,14 +25,17 @@ public class TransactionService(
             return Error.Failure("ParticipantNotFound", $"The participant with Id {createCreditTransactionRequest.ParticipantId} was not found.");
         }
 
+        var dateUtcNow = _dateTimeProvider.UtcNow;
+
         participant.IncreaseBalance(createCreditTransactionRequest.Amount);
+        participant.UpdatedAt = dateUtcNow;
 
         var transaction = new Transaction()
         {
             Amount = createCreditTransactionRequest.Amount,
             Type = TransactionType.Credit,
             ParticipantId = participant.Id,
-            CreatedAt = _dateTimeProvider.UtcNow,
+            CreatedAt = dateUtcNow,
             Participant = participant
         };
 

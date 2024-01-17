@@ -2,6 +2,7 @@
 using Money.API.Endpoints.Shared;
 using Money.API.Extensions;
 using Money.Domain.Requests;
+using Money.Domain.Responses;
 using Money.Domain.Services;
 using System.Net;
 
@@ -29,7 +30,22 @@ public static class ParticipantEndpoints
             if (createParticipantResult.IsError)
                 return Results.UnprocessableEntity(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.UnprocessableEntity, context.Request.Path, createParticipantResult.FirstError));
 
-            return Results.Created($"/api/v1/participants/{createParticipantResult.Value.Id}", createParticipantResult.Value);
+            return Results.Created($"/api/v1/participants/{createParticipantResult.Value.Id}", new CreateParticipantResponse(createParticipantResult.Value));
+        });
+
+        participantsV1.MapGet("/participants/{participantId:guid}/statement", async (Guid participantId, int? page, int? pageSize, ParticipantService participantService, HttpContext context) =>
+        {
+            page ??= 1;
+
+            if (pageSize is null || pageSize > 20)
+                pageSize = 20;
+
+            var statementResult = await participantService.Statement(participantId, page.Value, pageSize.Value);
+
+            if (statementResult.IsError)
+                return Results.NotFound(CustomProblemDetails.CreateDomainProblemDetails(HttpStatusCode.NotFound, context.Request.Path, statementResult.FirstError));
+
+            return Results.Ok(statementResult.Value);
         });
     }
 }

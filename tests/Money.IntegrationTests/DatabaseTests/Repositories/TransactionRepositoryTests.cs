@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Money.Domain.Repositories;
+using Money.Domain.Responses;
+using Money.TestsShared.Builders.Domain.Responses;
 
 namespace Money.IntegrationTests.DatabaseTests.Repositories;
 
@@ -40,5 +42,24 @@ public class TransactionRepositoryTests : BaseIntegrationTests
         var transactionsFromDatabase = ContextForAsserts.Transaction.ToList();
 
         transactions.Should().BeEquivalentTo(transactionsFromDatabase);
+    }
+
+    [Test]
+    public async Task ShouldGetStatementTransactions()
+    {
+        int page = 1;
+        int pageSize = 20;
+
+        var participant = new ParticipantBuilder().GenerateInDatabase(Context);
+
+        var transactions = new TransactionBuilder()
+            .WithParticipantId(participant.Id)
+            .GenerateInDatabase(Context, 5);
+
+        var expectedStatementTransactions = new StatementTransactionResponse().Convert(transactions);
+
+        var statementTransactions = await _transactionRepository.GetStatementTransactions(participant.Id, page, pageSize);
+
+        statementTransactions.Should().BeEquivalentTo(expectedStatementTransactions);
     }
 }

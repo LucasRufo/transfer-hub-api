@@ -7,6 +7,8 @@ public class Transfer
     public required Guid ToParticipantId { get; set; }
     public DateTime CreatedAt { get; set; }
 
+    public Participant FromParticipant { get; set; } = null!;
+    public Participant ToParticipant { get; set; } = null!;
     public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
     public Transfer()

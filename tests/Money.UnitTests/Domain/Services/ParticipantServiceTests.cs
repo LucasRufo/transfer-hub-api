@@ -1,7 +1,9 @@
 ﻿using Money.Domain.Entities;
 using Money.Domain.Providers.Datetime;
 using Money.Domain.Repositories;
+using Money.Domain.Responses;
 using Money.Domain.Services;
+using Money.TestsShared.Builders.Domain.Responses;
 using Money.UnitTests.Configuration;
 
 namespace Money.UnitTests.Domain.Services;
@@ -17,7 +19,7 @@ public class ParticipantServiceTests : BaseTests
     }
 
     [Test]
-    public async Task ShouldCreateParticipant()
+    public async Task CreateShouldCreateParticipant()
     {
         var createParticipantRequest = new CreateParticipantRequestBuilder().Generate();
         var createdAtFake = Faker.Date.Past();
@@ -47,7 +49,7 @@ public class ParticipantServiceTests : BaseTests
     }
 
     [Test]
-    public async Task ShouldReturnErrorWhenCPFAlreadyExists()
+    public async Task CreateShouldReturnErrorWhenCPFAlreadyExists()
     {
         var createParticipantRequest = new CreateParticipantRequestBuilder().Generate();
 
@@ -64,5 +66,61 @@ public class ParticipantServiceTests : BaseTests
 
         participantResult.IsError.Should().BeTrue();
         participantResult.FirstError.Should().BeEquivalentTo(error);
+    }
+
+    [Test]
+    public async Task StatementShouldGetStatement()
+    {
+        var participant = new ParticipantBuilder().Generate();
+        var page = 1;
+        var pageSize = 20;
+
+        var createdAtFake = Faker.Date.Past();
+
+        var statementTransaction = new StatementTransactionResponseBuilder().Generate(3);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(participant.Id))
+            .Returns(participant);
+
+        A.CallTo(() => AutoFake
+            .Resolve<ITransactionRepository>().GetStatementTransactions(participant.Id, page, pageSize))
+            .Returns(statementTransaction);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IDateTimeProvider>().UtcNow)
+            .Returns(createdAtFake);
+
+        var statementResult = await AutoFake.Resolve<ParticipantService>()
+            .Statement(participant.Id, page, pageSize);
+
+        var expectedStatement = new StatementResponse(page, pageSize, participant.Id, participant.Name, participant.Balance, statementTransaction);
+
+        statementResult.IsError.Should().BeFalse();
+        statementResult.Value.Should().BeEquivalentTo(expectedStatement);
+    }
+
+    [Test]
+    public async Task StatementShouldReturnErrorWhenParticipantIsNotFound()
+    {
+        var participant = new ParticipantBuilder().Generate();
+        var page = 1;
+        var pageSize = 20;
+
+        var createdAtFake = Faker.Date.Past();
+
+        var statementTransaction = new StatementTransactionResponseBuilder().Generate(3);
+
+        A.CallTo(() => AutoFake
+            .Resolve<IParticipantRepository>().GetById(participant.Id))
+            .Returns<Participant?>(null);
+
+        var statementResult = await AutoFake.Resolve<ParticipantService>()
+            .Statement(participant.Id, page, pageSize);
+
+        var error = Error.Failure("ParticipantNotFound", $"The participant with Id {participant.Id} was not found.");
+
+        statementResult.IsError.Should().BeTrue();
+        statementResult.FirstError.Should().BeEquivalentTo(error);
     }
 }
