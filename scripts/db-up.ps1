@@ -7,4 +7,4 @@ if (!$status) {
     docker run --name postgres -p 5432:5432 -v /tmp/database:/var/lib/postgresql/data -e POSTGRES_USER=dev -e POSTGRES_PASSWORD=dev@password123 -d postgres
 }
 
-dotnet run --project ../src/Money.Migrations/Money.Migrations.csproj up -s "Server=localhost;Database=money;Port=5432;User Id=dev;Password=dev@password123"
+dotnet run --project ../src/TransferHub.Migrations/TransferHub.Migrations.csproj up -s "Server=localhost;Database=transferhub;Port=5432;User Id=dev;Password=dev@password123"

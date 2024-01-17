@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run all tests
-        run: dotnet test Money.sln /p:CollectCoverage=true /p:CoverletOutput=../../Assets/Coverage/ /p:MergeWith="../../Assets/Coverage/coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1 --no-restore --verbosity normal
+        run: dotnet test TransferHub.sln /p:CollectCoverage=true /p:CoverletOutput=../../Assets/Coverage/ /p:MergeWith="../../Assets/Coverage/coverage.json" /p:CoverletOutputFormat=\"cobertura,json\" -m:1 --no-restore --verbosity normal
 
       - name: Code coverage report
         uses: irongut/CodeCoverageSummary@v1.3.0
