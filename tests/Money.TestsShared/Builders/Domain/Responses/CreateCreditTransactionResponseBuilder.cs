@@ -9,7 +9,7 @@ public class CreateCreditTransactionResponseBuilder : Faker<CreateCreditTransact
     {
         RuleFor(x => x.Id, faker => faker.Random.Guid());
         RuleFor(x => x.Type, faker => faker.Random.String());
-        RuleFor(x => x.Amount, faker => Math.Round(faker.Random.Decimal(), 2));
+        RuleFor(x => x.Amount, faker => Math.Round(faker.Random.Decimal(), 2).ToString());
         RuleFor(x => x.ParticipantId, faker => faker.Random.Guid());
         RuleFor(x => x.CreatedAt, faker => faker.Date.Recent().ToUniversalTime());
     }
@@ -26,7 +26,7 @@ public class CreateCreditTransactionResponseBuilder : Faker<CreateCreditTransact
         return this;
     }
 
-    public CreateCreditTransactionResponseBuilder WithAmount(decimal amount)
+    public CreateCreditTransactionResponseBuilder WithAmount(string amount)
     {
         RuleFor(x => x.Amount, faker => amount);
         return this;

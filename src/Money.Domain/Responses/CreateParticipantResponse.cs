@@ -7,7 +7,7 @@ public class CreateParticipantResponse
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string CPF { get; set; } = null!;
-    public decimal Balance { get; set; }
+    public string Balance { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
 
     public CreateParticipantResponse()
@@ -19,7 +19,7 @@ public class CreateParticipantResponse
         Id = participant.Id;
         Name = participant.Name;
         CPF = participant.CPF;
-        Balance = participant.Balance;
+        Balance = participant.Balance.ToString("0.00");
         CreatedAt = participant.CreatedAt;
     }
 }

@@ -12,5 +12,13 @@ public class TransferMapping : IEntityTypeConfiguration<Transfer>
 
         builder.Property(x => x.FromParticipantId).HasColumnName("from_participant_id");
         builder.Property(x => x.ToParticipantId).HasColumnName("to_participant_id");
+
+        builder.HasOne(e => e.FromParticipant)
+            .WithOne()
+            .HasForeignKey<Transfer>(e => e.FromParticipantId);
+
+        builder.HasOne(e => e.ToParticipant)
+            .WithOne()
+            .HasForeignKey<Transfer>(e => e.ToParticipantId);
     }
 }

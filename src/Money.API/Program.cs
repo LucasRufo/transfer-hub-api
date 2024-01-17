@@ -1,6 +1,7 @@
 using Money.API.Configuration;
 using Money.API.Configuration.Swagger;
 using Money.API.Endpoints;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ void ConfigureServices()
     builder.Services.AddApplicationServices();
     builder.Services.AddHealthCheck(builder.Configuration);
     builder.Services.AddVersioning();
+
+    builder.Services.ConfigureHttpJsonOptions(options => {
+        options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 }
 
 void ConfigureApp()
