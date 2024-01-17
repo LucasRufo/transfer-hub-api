@@ -7,7 +7,7 @@ Requirements:
 - It should be possible to transfer money from one participant to another ✅
   - It shouldn't be possible to transfer if the participant does not have enough money ✅
   - It shouldn't be possible to transfer if one of the participants does not exist ✅
-- It should be possible to get a statement with all transactions ❌
+- It should be possible to get a statement with all transactions ✅
 
 Tech Requirements:
 
