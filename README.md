@@ -33,9 +33,9 @@ This project can run locally in two ways:
 
 ### 1. Kubernetes using Kind
 
-The first way is running the project inside a local Kubernetes cluster using [Kind](https://kind.sigs.k8s.io/) and [Kindxt](https://github.com/sergioprates/kindxt). To run using this option you need Docker, Helm, Kind, Kindxt and Powershell.
+The first way would be running the project inside a local Kubernetes cluster using [Kind](https://kind.sigs.k8s.io/) and [Kindxt](https://github.com/sergioprates/kindxt). In order to run using this option you need Docker, Helm, Kind, Kindxt and Powershell.
 
-Open a terminal, navigate to the `scripts` folder and run the `kind-dev-up.ps1` script. After running the script, open your browser at `http://localhost:8080/transfer-hub/swagger/index.html`.
+First, open a terminal. Then navigate to the `scripts` folder and run the `kind-dev-up.ps1` script. After running the script, open your browser at `http://localhost:8080/transfer-hub/swagger/index.html`.
 
 ```bash
 kind-dev-up.ps1
@@ -43,17 +43,17 @@ kind-dev-up.ps1
 
 The script has the following steps to get the dev environment up and running:
 
-- Create the Kubernetes cluster using Kindxt with two dependencies: Nginx Ingress and PostgreSQL
-- Build the API Docker image
-- Load the image to Kind
-- Execute the migrations pointing to the PostgreSQL database inside the Kubernetes cluster.
-- Install the API helm chart
+1. Create the Kubernetes cluster using Kindxt with two dependencies: Nginx Ingress and PostgreSQL
+2. Build the API Docker image
+3. Load the image to Kind
+4. Execute the migrations pointing to the PostgreSQL database inside the Kubernetes cluster.
+5. Install the API helm chart
 
 ### 2. Using Visual Studio or .NET CLI
 
-This is an easier way of setting up the environment and it requires only Docker and Powershell. This option only runs a PostgreSQL docker container and the migrations, so you can run the API using Visual Studio or the .NET CLI using the `dotnet run` command.
+This is an easier way of setting up the environment and it requires Docker and Powershell only. This option exclusively runs a PostgreSQL docker container and the migrations, so you can run the API using Visual Studio or the .NET CLI using the `dotnet run` command.
 
-Open a terminal, navigate to the `scripts` folder and run the `db-up.ps1` script. 
+First, open a terminal. Then navigate to the `scripts` folder and run the `db-up.ps1` script. 
 
 ```bash
 db-up.ps1
