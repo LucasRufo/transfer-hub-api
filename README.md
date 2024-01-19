@@ -51,7 +51,7 @@ The script has the following steps to get the dev environment up and running:
 
 ### 2. Using Visual Studio or .NET CLI
 
-This is an easier way of setting up the environment and it requires Docker and Powershell only. This option only runs a PostgreSQL docker container and the migrations, so you can run the API using Visual Studio or the .NET CLI using the `dotnet run` command.
+This is an easier way of setting up the environment and it requires Docker and Powershell only. This option exclusively runs a PostgreSQL docker container and the migrations, so you can run the API using Visual Studio or the .NET CLI using the `dotnet run` command.
 
 First, open a terminal. Then navigate to the `scripts` folder and run the `db-up.ps1` script. 
 
