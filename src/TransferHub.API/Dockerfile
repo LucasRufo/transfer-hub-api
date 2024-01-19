@@ -9,10 +9,12 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["TransferHub.API/TransferHub.API.csproj", "TransferHub.API/"]
-RUN dotnet restore "./TransferHub.API/./TransferHub.API.csproj"
+COPY ["src/TransferHub.API/TransferHub.API.csproj", "src/TransferHub.API/"]
+COPY ["src/TransferHub.Domain/TransferHub.Domain.csproj", "src/TransferHub.Domain/"]
+COPY ["src/TransferHub.Infrastructure/TransferHub.Infrastructure.csproj", "src/TransferHub.Infrastructure/"]
+RUN dotnet restore "./src/TransferHub.API/./TransferHub.API.csproj"
 COPY . .
-WORKDIR "/src/TransferHub.API"
+WORKDIR "/src/src/TransferHub.API"
 RUN dotnet build "./TransferHub.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

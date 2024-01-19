@@ -1,0 +1,25 @@
+{{- $servicename := include "transfer-hub-api.name" . -}}
+{{- $port := .Values.service.port  -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "transfer-hub-api.name" . }}
+  labels:
+    {{- include "transfer-hub-api.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.ingress.path }}
+        pathType: {{ .Values.ingress.pathType }}
+        backend:
+          service:
+            name: {{ $servicename }}
+            port:
+              number: {{ $port }}
