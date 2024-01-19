@@ -1,0 +1,55 @@
+replicaCount: 1
+
+pathBase: /transfer-hub
+
+port: 8080
+
+image:
+  repository: transfer-hub/transfer-hub-api
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+secrets:
+  ConnectionStrings__DefaultConnection: "Server=postgres-postgresql-hl.default;Database=transferhub;Port=5432;User Id=desenv;Password=P@ssword123"
+
+configs:
+  ASPNETCORE_ENVIRONMENT: Production
+
+imagePullSecrets: []
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  description: "REST API for participant management, deposits and transfers."
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: ""
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  host: localhost
+  path: /transfer-hub(/|$)(.*)
+  pathType: Prefix
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80

@@ -1,6 +1,6 @@
 $containerName = "postgres"
 
-# Verifica se o container está rodando
+# Verifica se o DB está rodando
 $status = & docker ps --format "{{.Names}}" | Where-Object { $_ -eq $containerName }
 
 if (!$status) {
