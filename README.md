@@ -31,11 +31,11 @@ This project offers support for running inside Kubernetes, it has a Helm chart f
 
 This project can run locally in two ways:
 
-### 1. Kubernetes with Kind
+### 1. Kubernetes using Kind
 
 The first way is running the project inside a local Kubernetes cluster using [Kind](https://kind.sigs.k8s.io/) and [Kindxt](https://github.com/sergioprates/kindxt). To run using this option you need Docker, Helm, Kind, Kindxt and Powershell.
 
-Open a terminal, navigate to the `scripts` folder and run the `kind-dev-up.ps1` script. 
+Open a terminal, navigate to the `scripts` folder and run the `kind-dev-up.ps1` script. After running the script, open your browser at `http://localhost:8080/transfer-hub/swagger/index.html`.
 
 ```bash
 kind-dev-up.ps1
